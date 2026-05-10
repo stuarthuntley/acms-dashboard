@@ -1,0 +1,889 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>ACMS In-House Production Program — Project Status</title>
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+    background: #f0f2f5;
+    color: #1a1a2e;
+    min-height: 100vh;
+  }
+
+  /* ── GATE ───────────────────────────────────────────── */
+  #gate {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    min-height: 100vh;
+    background: linear-gradient(135deg, #0d1b2a 0%, #1a3a5c 100%);
+  }
+  .gate-box {
+    background: #fff;
+    border-radius: 12px;
+    padding: 48px 40px 40px;
+    width: 380px;
+    box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+    text-align: center;
+  }
+  .gate-logo {
+    display: inline-block;
+    background: #1a3a5c;
+    color: #fff;
+    font-size: 13px;
+    font-weight: 700;
+    letter-spacing: 3px;
+    padding: 6px 14px;
+    border-radius: 4px;
+    margin-bottom: 20px;
+  }
+  .gate-box h2 {
+    font-size: 22px;
+    font-weight: 600;
+    color: #0d1b2a;
+    margin-bottom: 8px;
+  }
+  .gate-box p {
+    font-size: 14px;
+    color: #666;
+    margin-bottom: 24px;
+  }
+  .gate-box input {
+    width: 100%;
+    padding: 11px 14px;
+    border: 1.5px solid #d1d5db;
+    border-radius: 7px;
+    font-size: 15px;
+    margin-bottom: 12px;
+    outline: none;
+    transition: border-color 0.2s;
+  }
+  .gate-box input:focus { border-color: #2563eb; }
+  .gate-box button {
+    width: 100%;
+    padding: 12px;
+    background: #1a3a5c;
+    color: #fff;
+    border: none;
+    border-radius: 7px;
+    font-size: 15px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: background 0.2s;
+  }
+  .gate-box button:hover { background: #2563eb; }
+  .gate-error {
+    font-size: 13px;
+    color: #dc2626;
+    margin-top: 10px;
+  }
+
+  /* ── DASHBOARD ──────────────────────────────────────── */
+  #dashboard { display: none; }
+
+  .top-bar {
+    background: linear-gradient(90deg, #0d1b2a 0%, #1a3a5c 100%);
+    color: #fff;
+    padding: 20px 32px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    gap: 12px;
+  }
+  .top-bar-left .badge {
+    display: inline-block;
+    background: rgba(255,255,255,0.15);
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 2px;
+    padding: 3px 10px;
+    border-radius: 3px;
+    margin-bottom: 8px;
+  }
+  .top-bar-left h1 {
+    font-size: 22px;
+    font-weight: 700;
+    letter-spacing: -0.3px;
+  }
+  .top-bar-left p {
+    font-size: 13px;
+    opacity: 0.7;
+    margin-top: 3px;
+  }
+  .top-bar-right {
+    text-align: right;
+    font-size: 13px;
+    opacity: 0.75;
+    line-height: 1.7;
+  }
+  .top-bar-right strong { opacity: 1; color: #fff; }
+
+  .main-wrap {
+    max-width: 960px;
+    margin: 0 auto;
+    padding: 28px 20px 60px;
+  }
+
+  /* ── SUMMARY CARD ───────────────────────────────────── */
+  .summary-card {
+    background: #fff;
+    border-radius: 10px;
+    padding: 24px 28px;
+    margin-bottom: 24px;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.06);
+    display: flex;
+    gap: 24px;
+    flex-wrap: wrap;
+    align-items: flex-start;
+  }
+  .summary-main { flex: 1; min-width: 220px; }
+  .status-line {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    flex-wrap: wrap;
+    margin-bottom: 12px;
+    font-size: 15px;
+  }
+  .status-line-label { color: #475569; font-weight: 600; }
+  .status-line-pipe  { color: #cbd5e1; font-size: 18px; font-weight: 300; margin: 0 2px; }
+  .status-line-phase { color: #2563eb; font-weight: 700; }
+  .summary-divider {
+    width: 1px;
+    background: #e2e8f0;
+    align-self: stretch;
+    margin: 0 8px;
+    flex-shrink: 0;
+  }
+  .summary-upcoming { display: flex; flex-direction: column; gap: 8px; }
+  .upcoming-title {
+    font-size: 11px;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    color: #94a3b8;
+    font-weight: 600;
+    margin-bottom: 2px;
+  }
+  .summary-main .headline {
+    font-size: 15px;
+    color: #374151;
+    line-height: 1.6;
+    margin-bottom: 12px;
+  }
+  .summary-meta {
+    display: flex;
+    gap: 10px;
+    flex-wrap: wrap;
+  }
+  .meta-chip {
+    background: #f1f5f9;
+    border-radius: 20px;
+    padding: 5px 13px;
+    font-size: 12px;
+    color: #475569;
+  }
+  .meta-chip strong { color: #0d1b2a; }
+  .summary-stats {
+    display: flex;
+    gap: 16px;
+    flex-wrap: wrap;
+  }
+  .stat-box {
+    background: #f8fafc;
+    border: 1px solid #e2e8f0;
+    border-radius: 8px;
+    padding: 14px 20px;
+    text-align: center;
+    min-width: 120px;
+    position: relative;
+    cursor: default;
+  }
+  .stat-box .stat-val {
+    font-size: 22px;
+    font-weight: 700;
+    color: #0d1b2a;
+    line-height: 1;
+    margin-bottom: 4px;
+  }
+  .stat-box .stat-label {
+    font-size: 11px;
+    color: #94a3b8;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+  }
+  .stat-box.stat-next {
+    border-color: #2563eb;
+    background: #eff6ff;
+  }
+  .stat-box.stat-next .stat-val { color: #2563eb; }
+  .stat-box.stat-next .stat-label { color: #93c5fd; }
+  .stat-tip {
+    display: none;
+    position: absolute;
+    bottom: calc(100% + 10px);
+    left: 50%;
+    transform: translateX(-50%);
+    background: #1e293b;
+    color: #e2e8f0;
+    font-size: 12px;
+    line-height: 1.6;
+    padding: 10px 14px;
+    border-radius: 7px;
+    width: 230px;
+    z-index: 200;
+    pointer-events: none;
+    box-shadow: 0 6px 20px rgba(0,0,0,0.25);
+    text-align: left;
+    font-weight: 400;
+  }
+  .stat-tip::after {
+    content: '';
+    position: absolute;
+    top: 100%;
+    left: 50%;
+    transform: translateX(-50%);
+    border: 7px solid transparent;
+    border-top-color: #1e293b;
+  }
+  .stat-box:hover .stat-tip { display: block; }
+
+  /* ── STATUS BADGES ──────────────────────────────────── */
+  .badge-status {
+    display: inline-flex;
+    align-items: center;
+    gap: 5px;
+    font-size: 12px;
+    font-weight: 600;
+    padding: 4px 10px;
+    border-radius: 20px;
+    text-transform: uppercase;
+    letter-spacing: 0.4px;
+  }
+  .badge-status::before { content: '●'; font-size: 8px; }
+  .s-active    { background: #dbeafe; color: #1d4ed8; }
+  .s-on-track  { background: #dcfce7; color: #15803d; }
+  .s-pending   { background: #fef3c7; color: #b45309; }
+  .s-blocked   { background: #fee2e2; color: #b91c1c; }
+  .s-complete  { background: #f1f5f9; color: #475569; }
+  .s-concurrent{ background: #f3e8ff; color: #7c3aed; }
+
+  /* ── PROGRESS TRACK ─────────────────────────────────── */
+  .progress-section {
+    margin-bottom: 24px;
+  }
+  .progress-section h3 {
+    font-size: 11px;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    color: #94a3b8;
+    margin-bottom: 12px;
+  }
+  .phase-track {
+    display: flex;
+    gap: 0;
+    border-radius: 8px;
+    overflow: hidden;
+    height: 36px;
+  }
+  .track-segment {
+    flex: 1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 11px;
+    font-weight: 600;
+    color: #fff;
+    cursor: pointer;
+    transition: filter 0.2s;
+    position: relative;
+  }
+  .track-segment:hover { filter: brightness(1.15); }
+  .track-segment.t-done    { background: #6b7280; }
+  .track-segment.t-active  { background: #2563eb; }
+  .track-segment.t-pending { background: #94a3b8; }
+  .track-segment span { display: none; }
+  @media(min-width:600px) { .track-segment span { display: block; } }
+
+  /* ── PHASE CARDS ────────────────────────────────────── */
+  .section-label {
+    font-size: 11px;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    color: #94a3b8;
+    margin-bottom: 12px;
+    margin-top: 8px;
+  }
+  .phase-card {
+    background: #fff;
+    border-radius: 10px;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.06);
+    margin-bottom: 12px;
+    border-left: 4px solid #e2e8f0;
+    overflow: hidden;
+    transition: box-shadow 0.2s;
+  }
+  .phase-card:hover { box-shadow: 0 4px 16px rgba(0,0,0,0.1); }
+  .phase-card.is-active { border-left-color: #2563eb; }
+  .phase-card.is-blocked { border-left-color: #dc2626; }
+  .phase-card.is-complete { border-left-color: #6b7280; opacity: 0.85; }
+  .phase-card.is-concurrent { border-left-color: #7c3aed; }
+
+  .phase-header {
+    padding: 18px 22px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    user-select: none;
+  }
+  .phase-header:hover { background: #fafafa; }
+  .phase-num {
+    width: 34px;
+    height: 34px;
+    border-radius: 50%;
+    background: #f1f5f9;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 13px;
+    font-weight: 700;
+    color: #475569;
+    flex-shrink: 0;
+  }
+  .phase-card.is-active .phase-num { background: #dbeafe; color: #1d4ed8; }
+  .phase-card.is-complete .phase-num { background: #f1f5f9; color: #9ca3af; }
+  .phase-info { flex: 1; }
+  .phase-info h3 {
+    font-size: 15px;
+    font-weight: 600;
+    color: #0d1b2a;
+    margin-bottom: 3px;
+  }
+  .phase-info .phase-date {
+    font-size: 12px;
+    color: #94a3b8;
+  }
+  .phase-right {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    flex-shrink: 0;
+  }
+  .phase-summary {
+    font-size: 13px;
+    color: #64748b;
+    max-width: 280px;
+    text-align: right;
+    display: none;
+  }
+  @media(min-width:700px) { .phase-summary { display: block; } }
+  .expand-icon {
+    font-size: 18px;
+    color: #94a3b8;
+    transition: transform 0.25s;
+    width: 20px;
+    text-align: center;
+  }
+  .phase-card.open .expand-icon { transform: rotate(90deg); }
+
+  .phase-body {
+    display: none;
+    padding: 0 22px 20px;
+    border-top: 1px solid #f1f5f9;
+  }
+  .phase-card.open .phase-body { display: block; }
+  .phase-desc {
+    font-size: 13px;
+    color: #64748b;
+    padding: 14px 0 16px;
+    line-height: 1.65;
+    border-bottom: 1px solid #f1f5f9;
+    margin-bottom: 16px;
+  }
+
+  /* ── TASK TABLE ─────────────────────────────────────── */
+  .task-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 13px;
+  }
+  .task-table th {
+    text-align: left;
+    padding: 8px 10px;
+    font-size: 11px;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    color: #94a3b8;
+    border-bottom: 1px solid #e2e8f0;
+  }
+  .task-table td {
+    padding: 10px 10px;
+    border-bottom: 1px solid #f8fafc;
+    vertical-align: top;
+    line-height: 1.5;
+  }
+  .task-table tr:last-child td { border-bottom: none; }
+  .task-table .col-task { color: #1e293b; font-weight: 500; width: 38%; }
+  .task-due { font-size: 11px; color: #94a3b8; margin-top: 3px; font-weight: 400; }
+  .task-table .col-involves { color: #475569; width: 18%; }
+  .task-table .col-status { width: 14%; }
+  .task-table .col-notes { color: #64748b; font-style: italic; width: 30%; }
+
+  .phase-note {
+    margin-top: 14px;
+    padding: 10px 14px;
+    background: #fffbeb;
+    border-left: 3px solid #f59e0b;
+    border-radius: 4px;
+    font-size: 12px;
+    color: #78350f;
+    line-height: 1.6;
+  }
+
+  /* ── OPEN QUESTIONS ─────────────────────────────────── */
+  .oq-card {
+    background: #fff;
+    border-radius: 10px;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.06);
+    padding: 22px 26px;
+    margin-top: 24px;
+  }
+  .oq-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    cursor: pointer;
+    user-select: none;
+    padding-bottom: 2px;
+  }
+  .oq-header:hover h3 { color: #2563eb; }
+  .oq-header h3 {
+    font-size: 14px;
+    font-weight: 700;
+    color: #0d1b2a;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    transition: color 0.2s;
+  }
+  .oq-body { display: none; margin-top: 14px; }
+  .oq-body.open { display: block; }
+  .oq-header .expand-icon { color: #94a3b8; font-size: 18px; transition: transform 0.25s; }
+  .oq-header.open .expand-icon { transform: rotate(90deg); }
+  .oq-list { list-style: none; }
+  .oq-list li {
+    padding: 9px 0;
+    border-bottom: 1px solid #f1f5f9;
+    font-size: 13px;
+    color: #374151;
+    display: flex;
+    gap: 10px;
+    line-height: 1.5;
+  }
+  .oq-list li:last-child { border-bottom: none; }
+  .oq-num {
+    font-size: 11px;
+    font-weight: 700;
+    color: #94a3b8;
+    min-width: 22px;
+    padding-top: 1px;
+  }
+  .oq-why {
+    font-size: 12px;
+    color: #94a3b8;
+    margin-top: 2px;
+  }
+
+  /* ── FOOTER ─────────────────────────────────────────── */
+  .dash-footer {
+    text-align: center;
+    font-size: 12px;
+    color: #94a3b8;
+    margin-top: 40px;
+    padding-bottom: 20px;
+  }
+
+  .hidden { display: none !important; }
+</style>
+</head>
+<body>
+
+<!-- ══════════════════════════════════════════════════════
+     PASSWORD GATE
+════════════════════════════════════════════════════════ -->
+<div id="gate">
+  <div class="gate-box">
+    <div class="gate-logo">IONNIQ</div>
+    <h2>ACMS Project Dashboard</h2>
+    <p>Enter the access password provided by Stuart.</p>
+    <input type="password" id="gate-input" placeholder="Password"
+           onkeydown="if(event.key==='Enter') checkPassword()" />
+    <button onclick="checkPassword()">Access Dashboard</button>
+    <p id="gate-error" class="gate-error hidden">Incorrect password. Please try again.</p>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════════════════════
+     DASHBOARD
+════════════════════════════════════════════════════════ -->
+<div id="dashboard">
+
+  <div class="top-bar">
+    <div class="top-bar-left">
+      <div class="badge">IONNIQ — INTERNAL</div>
+      <h1>ACMS In-House Production Program</h1>
+      <p>Stuart Huntley — Project Status Dashboard</p>
+    </div>
+    <div class="top-bar-right" id="top-meta"></div>
+  </div>
+
+  <div class="main-wrap">
+
+    <!-- Summary -->
+    <div class="summary-card" id="summary-card"></div>
+
+    <!-- Progress Track -->
+    <div class="progress-section">
+      <h3>Program Phases</h3>
+      <div class="phase-track" id="phase-track"></div>
+    </div>
+
+    <!-- Phase Cards -->
+    <div class="section-label">Phase Detail — click any phase to expand</div>
+    <div id="phase-cards"></div>
+
+    <!-- Open Questions -->
+    <div class="oq-card" id="oq-card"></div>
+
+    <div class="dash-footer" id="dash-footer"></div>
+
+  </div>
+</div>
+
+
+<script>
+// ╔══════════════════════════════════════════════════════════╗
+// ║  CONFIGURATION — UPDATE THIS SECTION WHEN STATUS CHANGES ║
+// ╚══════════════════════════════════════════════════════════╝
+
+const CONFIG = {
+  password:    "13693",       // Shared with Chris & Alex — change any time
+  lastUpdated: "May 10, 2026",
+  updatedBy:   "Stuart Huntley"
+};
+
+const SUMMARY = {
+  overallStatus: "on-track",       // on-track | at-risk | blocked
+  currentPhase:  "Pre-Boston Priorities",
+  headline: "Pre-Boston hold. Parts expected ~May 20. Gas Simulator release imminent. Hardware encasing coordination underway.",
+  nextTarget:     "Boston Trip 1",
+  nextTargetDate: "Week of May 20 (earliest — parts-dependent)",
+  upcoming: [
+    { date: "This week", label: "Gas Simulator release",  tip: "Gas Simulator stable build — final tweaks in progress. Delivery to Chris and Alex for demos and client discussions. Also needed before Boston trip." },
+    { date: "~May 20",   label: "Boston Trip 1",          tip: "Earliest possible trip date, dependent on parts arriving at Meza in Boston. Alex and Stuart are finalising the field kit and documentation plan. Brian to confirm once parts are in hand." },
+    { date: "~July 7",   label: "Encasing deadline",      tip: "60-day hardware encasing target from ~May 7. Vendor coordination in progress. Jim may have a manufacturer lead — status to be confirmed." }
+  ]
+};
+
+// status options: "active" | "on-track" | "pending" | "blocked" | "complete" | "concurrent"
+const PHASES = [
+  {
+    id: "p0",
+    num: "1",
+    short: "Priorities",
+    name: "Pre-Boston Priorities",
+    dateRange: "May 9–19, 2026",
+    status: "active",
+    summary: "Key deliverables and logistics to complete before the Boston trip.",
+    description: "All work that can move forward before the Boston trip. Hardware-independent tracks running in parallel: Gas Simulator release, Testing & Certification Roadmap, assembly workshop planning, and hardware encasing coordination.",
+    tasks: [
+      { task: "Gas Simulator — stable build release",           due: "This week",          involves: "Chris, Alex",       status: "on-track", notes: "Minor tweaks remaining" },
+      { task: "Testing & Certification Roadmap",                due: "This week",          involves: "Chris",             status: "on-track", notes: "Agreed deliverable; no external blockers; in progress" },
+      { task: "Boston Trip 1 — confirm date",                   due: "By May 13",          involves: "Brian",             status: "pending",  notes: "Parts expected ~May 20; awaiting confirmation" },
+      { task: "Boston Trip 1 — field kit & documentation plan", due: "Before trip",        involves: "Alex, Chris",       status: "pending",  notes: "Finalise once trip date confirmed" },
+      { task: "Assembly workshop — initial equipment list",     due: "Before trip",        involves: "Chris",             status: "on-track", notes: "First-pass list in progress; refine after Trip 1" },
+      { task: "Hardware encasing — vendor coordination",        due: "~July 7 (deadline)", involves: "Alex, Chris, Jim",  status: "on-track", notes: "60-day target from ~May 7; following up on manufacturer lead" }
+    ]
+  },
+  {
+    id: "p1",
+    num: "2",
+    short: "Trip 1",
+    name: "Boston Trip 1",
+    dateRange: "Week of May 20+ (parts-dependent)",
+    status: "pending",
+    summary: "Observe parts arrival, first assembly build, and begin documentation capture.",
+    description: "Travel to Boston once parts arrive. Primary goals: observe incoming component verification, watch first spectrometer assembly, begin tribal knowledge capture across the five complexity hotspots (vacuum, ion source, filament, tuning, detector). Also: infrastructure audit of the lab to feed Ionniq workshop procurement.",
+    note: "Each week of further parts delay propagates forward into all downstream work.",
+    tasks: [
+      { task: "Incoming parts — receipt & inspection",          due: "Week of May 20+",    involves: "Brian, Scott",       status: "pending", notes: "Observe Meza incoming QC process" },
+      { task: "First spectrometer assembly — observation",      due: "Week of May 20+",    involves: "Brian, Scott",       status: "pending", notes: "Scope documentation requirements for co-build stage" },
+      { task: "Tribal knowledge capture — vacuum, ion source, filament, tuning", due: "During trip", involves: "Brian", status: "pending", notes: "GoPro, Plaud Pro, keyword markers per field kit protocol" },
+      { task: "Infrastructure audit — lab setup",               due: "During trip",        involves: "Brian, Scott",       status: "pending", notes: "Bench config, vacuum station, tooling → feeds HQ workshop list" },
+      { task: "Prepared question list — vacuum, supply chain, tuning, software", due: "Before trip", involves: "Brian", status: "pending", notes: "From May 2026 question prep doc" }
+    ]
+  },
+  {
+    id: "p3",
+    num: "3",
+    short: "Docs & Facility",
+    name: "Documentation & Facility Build",
+    dateRange: "Late May – July 2026",
+    status: "pending",
+    summary: "Post-trip debrief, BOM delivery, workshop procurement, assembly documentation v1.",
+    description: "Ionniq-side build-up running in parallel as the prototype is completed. Key outputs: Trip 1 video indexed and tribal knowledge extracted, verified BOM delivered, assembly workshop equipped and operational.",
+    tasks: [
+      { task: "Trip 1 debrief — video indexed, knowledge extracted", due: "1–2 weeks post-trip",     involves: "—",         status: "pending", notes: "Index footage; extract key assembly observations" },
+      { task: "Verified BOM / parts list",                      due: "June–July window",             involves: "Jim",        status: "blocked", notes: "Blocked: requires Trip 1 observation and spec list" },
+      { task: "Workshop equipment procurement",                  due: "June–July window",             involves: "Chris",      status: "pending", notes: "Long-lead items first; finalise list after Trip 1" },
+      { task: "Gas Simulator — final stable release",           due: "June–July window",             involves: "Tony",       status: "pending", notes: "For software team UI implementation with live data" },
+      { task: "Assembly documentation v1 — draft",              due: "Early July window",            involves: "—",          status: "pending", notes: "Based on Trip 1 footage and observation notes" },
+      { task: "Hardware encasing — finalised",                  due: "~July 7 (deadline)",           involves: "Alex, Chris", status: "pending", notes: "60-day target from ~May 7" }
+    ]
+  },
+  {
+    id: "p4",
+    num: "4",
+    short: "Trip 2",
+    name: "Boston Trip 2",
+    dateRange: "Late June – July 2026 (TBD)",
+    status: "pending",
+    summary: "Hands-on documentation pass with Ionniq technician present.",
+    description: "Second Boston trip with the incoming electromechanical technician. Deeper documentation pass using the 7-section assembly template. Goal: Ionniq personnel can begin independent build attempts. This trip gates the co-build stage.",
+    note: "Blocked on technician hire and onboarding — hiring timeline not yet confirmed.",
+    tasks: [
+      { task: "Hands-on assembly — technician introduction",    due: "Late June–July window",  involves: "Brian, Technician", status: "blocked", notes: "Blocked: technician must be hired and onboarded first" },
+      { task: "Full 7-section documentation pass",              due: "Late June–July window",  involves: "Brian, Technician", status: "blocked", notes: "Closes gaps from Trip 1; builds toward complete assembly manual" },
+      { task: "Independent build readiness — assessment",       due: "July window",            involves: "Chris",             status: "blocked", notes: "Go/no-go gate for co-build stage" }
+    ]
+  },
+  {
+    id: "p5",
+    num: "5",
+    short: "Readiness",
+    name: "Co-Build Readiness",
+    dateRange: "July – August 2026",
+    status: "pending",
+    summary: "Design review and freeze. Workshop, team, and parts pipeline ready to build.",
+    description: "Gates the co-build. Ionniq must be fully ready to build 3 units in parallel: design reviewed and frozen, assembly workshop operational, technician trained, and component sourcing pipeline active.",
+    tasks: [
+      { task: "Critical design review — design frozen",              due: "July window",          involves: "Brian, Chris", status: "pending", notes: "Design review and freeze before co-build begins" },
+      { task: "Assembly workshop — fully equipped and operational",   due: "July–August window",   involves: "Chris",        status: "pending", notes: "All long-lead equipment must be in place" },
+      { task: "Component sourcing pipeline — active",                due: "July–August window",   involves: "Jim",          status: "pending", notes: "Requires completed BOM from Documentation stage" }
+    ]
+  },
+  {
+    id: "p6",
+    num: "6",
+    short: "Co-Build",
+    name: "Co-Build",
+    dateRange: "Aug – Oct 2026 (optimistic) · Nov – Dec 2026 (realistic)",
+    status: "pending",
+    summary: "Ionniq builds 3 units in parallel. Functional independence demonstrated.",
+    description: "The program's primary goal: Ionniq independently executes the full ACMS assembly cycle. These units are for internal validation only, not commercial deployment. Functional independence — not a documentation handoff — is the bar.",
+    note: "Optimistic completion: Sep–Oct 2026. Realistic (if delays continue): Nov–Dec 2026.",
+    tasks: [
+      { task: "Ionniq builds Units 1–3 — HQ workshop",              due: "Aug–Sep window",       involves: "Technician",   status: "pending", notes: "Parallel build track alongside Meza" },
+      { task: "System-level testing + QA",                          due: "Sep window",            involves: "Brian, Chris", status: "pending", notes: "Both build tracks converge here" },
+      { task: "Co-build complete — functional independence demonstrated", due: "Sep–Oct window (optimistic)", involves: "Brian, Chris", status: "pending", notes: "Nov–Dec if upstream delays continue" }
+    ]
+  }
+];
+
+const OPEN_QUESTIONS = [
+  { q: "Boston Trip 1 — exact date",                              why: "Pivots on parts arrival confirmation — gates all Phase 1 work" },
+  { q: "Assembly workshop location — HQ building vs. Michigan",   why: "Earlier planning assumed Michigan (R&D tax credit); recent references point to HQ building" },
+  { q: "Technician hiring timeline",                              why: "Gates Boston Trip 2 and co-build readiness" },
+  { q: "Hardware encasing — manufacturer lead status",            why: "Affects 60-day encasing track" },
+  { q: "IP agreement — signed and in hand?",                      why: "Standing item; Chris's May 1 letter describes it as settled — worth confirming" },
+  { q: "Explicit co-build target completion month",               why: "Would sharpen the schedule gap analysis considerably" }
+];
+
+// ╔══════════════════════════════════════════════════════════╗
+// ║  END OF CONFIGURATION — DO NOT EDIT BELOW THIS LINE      ║
+// ╚══════════════════════════════════════════════════════════╝
+
+function checkPassword() {
+  const input = document.getElementById('gate-input').value;
+  const err = document.getElementById('gate-error');
+  if (input === CONFIG.password) {
+    sessionStorage.setItem('acms_auth', '1');
+    document.getElementById('gate').style.display = 'none';
+    document.getElementById('dashboard').style.display = 'block';
+    buildDashboard();
+  } else {
+    err.classList.remove('hidden');
+    document.getElementById('gate-input').value = '';
+    document.getElementById('gate-input').focus();
+  }
+}
+
+function statusLabel(s) {
+  const map = {
+    'active':     'Current',
+    'on-track':   'On Track',
+    'pending':    'Pending',
+    'blocked':    'Blocked',
+    'complete':   'Complete',
+    'concurrent': 'Concurrent'
+  };
+  return map[s] || s;
+}
+
+function badgeClass(s) {
+  const map = {
+    'active': 's-active', 'on-track': 's-on-track', 'pending': 's-pending',
+    'blocked': 's-blocked', 'complete': 's-complete', 'concurrent': 's-concurrent'
+  };
+  return 'badge-status ' + (map[s] || 's-pending');
+}
+
+function cardClass(s) {
+  const map = {
+    'active': 'is-active', 'blocked': 'is-blocked',
+    'complete': 'is-complete', 'concurrent': 'is-concurrent'
+  };
+  return map[s] || '';
+}
+
+function buildDashboard() {
+  // Top meta
+  document.getElementById('top-meta').innerHTML =
+    `<strong>Last updated</strong><br>${CONFIG.lastUpdated}<br>by ${CONFIG.updatedBy}`;
+
+  // Summary card
+  const overallBadge = `<span class="${badgeClass(SUMMARY.overallStatus)}">${statusLabel(SUMMARY.overallStatus)}</span>`;
+  const upcomingHtml = SUMMARY.upcoming.map((u, i) =>
+    `<div class="stat-box ${i === 0 ? 'stat-next' : ''}">
+       <div class="stat-val">${u.date}</div>
+       <div class="stat-label">${u.label}</div>
+       ${u.tip ? `<div class="stat-tip">${u.tip}</div>` : ''}
+     </div>`
+  ).join('');
+  document.getElementById('summary-card').innerHTML = `
+    <div class="summary-main">
+      <div class="status-line">
+        <span class="status-line-label">Overall status:</span>
+        ${overallBadge}
+        <span class="status-line-pipe">|</span>
+        <span class="status-line-label">Current stage:</span>
+        <span class="status-line-phase">${SUMMARY.currentPhase}</span>
+      </div>
+      <p class="headline">${SUMMARY.headline}</p>
+      <div class="summary-meta">
+        <div class="meta-chip">Next: <strong>${SUMMARY.nextTarget}</strong></div>
+        <div class="meta-chip">ETA: <strong>${SUMMARY.nextTargetDate}</strong></div>
+      </div>
+    </div>
+    <div class="summary-divider"></div>
+    <div class="summary-upcoming">
+      <div class="upcoming-title">Key Dates</div>
+      <div class="summary-stats">${upcomingHtml}</div>
+    </div>
+  `;
+
+  // Phase track
+  const trackHtml = PHASES.map(p => {
+    const t = p.status === 'active' || p.status === 'concurrent' ? 't-active'
+            : p.status === 'complete' ? 't-done' : 't-pending';
+    return `<div class="track-segment ${t}" onclick="toggleCard('${p.id}')" title="${p.name}">
+              <span>${p.short}</span>
+            </div>`;
+  }).join('');
+  document.getElementById('phase-track').innerHTML = trackHtml;
+
+  // Phase cards
+  const cardsHtml = PHASES.map(p => {
+    const tasksHtml = p.tasks.map(t => `
+      <tr>
+        <td class="col-task">${t.task}${t.due ? `<div class="task-due">${t.due}</div>` : ''}</td>
+        <td class="col-involves">${t.involves || '—'}</td>
+        <td class="col-status"><span class="${badgeClass(t.status)}">${statusLabel(t.status)}</span></td>
+        <td class="col-notes">${t.notes}</td>
+      </tr>`).join('');
+    const noteHtml = p.note ? `<div class="phase-note">⚠ ${p.note}</div>` : '';
+    const descHtml = p.description ? `<div class="phase-desc">${p.description}</div>` : '';
+    const openClass = '';
+    return `
+      <div class="phase-card ${cardClass(p.status)}${openClass}" id="${p.id}">
+        <div class="phase-header" onclick="toggleCard('${p.id}')">
+          <div class="phase-num">${p.num}</div>
+          <div class="phase-info">
+            <h3>${p.name}</h3>
+            <div class="phase-date">${p.dateRange}</div>
+          </div>
+          <div class="phase-right">
+            <span class="phase-summary">${p.summary}</span>
+            <span class="${badgeClass(p.status)}">${statusLabel(p.status)}</span>
+            <span class="expand-icon">›</span>
+          </div>
+        </div>
+        <div class="phase-body">
+          ${descHtml}
+          <table class="task-table">
+            <thead>
+              <tr>
+                <th>Task</th><th>Involves</th><th>Status</th><th>Notes</th>
+              </tr>
+            </thead>
+            <tbody>${tasksHtml}</tbody>
+          </table>
+          ${noteHtml}
+        </div>
+      </div>`;
+  }).join('');
+  document.getElementById('phase-cards').innerHTML = cardsHtml;
+
+  // Open questions
+  const oqItems = OPEN_QUESTIONS.map((q, i) => `
+    <li>
+      <span class="oq-num">${i+1}</span>
+      <div>
+        <div>${q.q}</div>
+        <div class="oq-why">${q.why}</div>
+      </div>
+    </li>`).join('');
+  document.getElementById('oq-card').innerHTML = `
+    <div class="oq-header" onclick="toggleOQ()">
+      <h3>Open Questions <span style="font-size:12px;font-weight:400;color:#94a3b8;margin-left:6px">${OPEN_QUESTIONS.length} items</span></h3>
+      <span class="expand-icon" id="oq-icon">›</span>
+    </div>
+    <div class="oq-body" id="oq-body">
+      <ul class="oq-list">${oqItems}</ul>
+    </div>`;
+
+  // Footer
+  document.getElementById('dash-footer').innerHTML =
+    `ACMS In-House Production Program &nbsp;·&nbsp; Ionniq &nbsp;·&nbsp; Updated ${CONFIG.lastUpdated} by ${CONFIG.updatedBy}`;
+}
+
+// Auto-unlock if already authenticated this browser session
+window.addEventListener('DOMContentLoaded', () => {
+  if (sessionStorage.getItem('acms_auth') === '1') {
+    document.getElementById('gate').style.display = 'none';
+    document.getElementById('dashboard').style.display = 'block';
+    buildDashboard();
+  }
+  document.getElementById('gate-input').addEventListener('keydown', e => {
+    if (e.key === 'Enter') checkPassword();
+  });
+});
+
+function toggleCard(id) {
+  document.getElementById(id).classList.toggle('open');
+}
+
+function toggleOQ() {
+  document.getElementById('oq-body').classList.toggle('open');
+  document.getElementById('oq-icon').style.transform =
+    document.getElementById('oq-body').classList.contains('open') ? 'rotate(90deg)' : '';
+  document.querySelector('.oq-header').classList.toggle('open');
+}
+</script>
+</body>
+</html>
