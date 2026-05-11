@@ -577,18 +577,18 @@
 
 const CONFIG = {
   password:    "13693",       // Shared with Chris & Alex — change any time
-  lastUpdated: "May 10, 2026 · 19:57 CDT",
+  lastUpdated: "May 11, 2026 · 09:00 CDT",
   updatedBy:   "Stuart Huntley"
 };
 
 const SUMMARY = {
   overallStatus: "on-track",       // on-track | at-risk | blocked
   currentPhase:  "Pre-Boston Priorities",
-  headline: "Pre-Boston hold. Parts expected ~May 20. Testing &amp; Certification Roadmap delivered. Field kit recommendation complete. Assembly workshop plan in progress — Dallas HQ confirmed as production facility.",
+  headline: "Pre-Boston hold. Parts expected ~May 20. Testing &amp; Certification Roadmap delivered. Gas Simulator final build complete — executable on shared Dropbox. Field kit recommendation complete. Assembly workshop plan in progress — Dallas HQ confirmed as production facility.",
   nextTarget:     "Boston Trip 1",
   nextTargetDate: "Week of May 20 (earliest — parts-dependent)",
   upcoming: [
-    { date: "This week", label: "Gas Simulator release",  tip: "Gas Simulator stable build — final tweaks in progress. Delivery to Chris and Alex for demos and client discussions. Also needed before Boston trip." },
+    { date: "✓ Done",    label: "Gas Simulator release",  tip: "Gas Simulator final build complete (May 11). Executable available on shared Dropbox. Ready for Tony's UI work and demo discussions with Chris and Alex." },
     { date: "~May 20",   label: "Boston Trip 1",          tip: "Earliest possible trip date, dependent on parts arriving at Meza in Boston. Field kit recommendation V7 complete ($785). Brian to confirm once parts are in hand." },
     { date: "~July 7",   label: "Encasing deadline",      tip: "60-day hardware encasing target from ~May 7. Vendor coordination active. On track for July 7 deadline." }
   ]
@@ -606,7 +606,7 @@ const PHASES = [
     summary: "Key deliverables and logistics to complete before the Boston trip.",
     description: "All work that can move forward before the Boston trip. Hardware-independent tracks running in parallel: Gas Simulator release, Testing & Certification Roadmap, assembly workshop planning, and hardware encasing coordination.",
     tasks: [
-      { task: "Gas Simulator — stable build release",           due: "This week",          involves: "Chris, Alex",       status: "in-progress", notes: "Final tweaks underway; release imminent." },
+      { task: "Gas Simulator — stable build release",           due: "May 11, 2026",       involves: "Chris, Alex, Tony", status: "complete",    notes: "Final build complete May 11. Executable available on shared Dropbox. Ready for Tony's UI integration and demo discussions." },
       { task: "Testing & Certification Roadmap",                due: "This week",          involves: "Chris",             status: "submitted",   notes: "Delivered May 10, 2026. Filed in shared folder — 01_Certification and Labeling." },
       { task: "Boston Trip 1 — confirm date",                   due: "By May 13",          involves: "Brian",             status: "pending",     notes: "Parts expected ~May 20; awaiting confirmation from Brian." },
       { task: "Boston Trip 1 — field kit & documentation plan", due: "Before trip",        involves: "Alex, Chris",       status: "submitted",   notes: "Field kit recommendation V7 complete ($785, 46% reduction). Shared in 02_Pre-Boston Priorities. Procurement ready once trip date confirmed." },
@@ -645,7 +645,7 @@ const PHASES = [
       { task: "Trip 1 debrief — video indexed, knowledge extracted", due: "1–2 weeks post-trip",     involves: "—",         status: "pending", notes: "Index footage; extract key assembly observations" },
       { task: "Verified BOM / parts list",                      due: "June–July window",             involves: "Jim",        status: "blocked", notes: "Blocked: requires Trip 1 observation and spec list" },
       { task: "Workshop equipment procurement",                  due: "June–July window",             involves: "Chris",      status: "pending", notes: "Long-lead items first; finalise list after Trip 1" },
-      { task: "Gas Simulator — final stable release",           due: "June–July window",             involves: "Tony",       status: "pending", notes: "For software team UI implementation with live data" },
+      { task: "Gas Simulator — handoff to Tony for UI integration", due: "Week of May 18",            involves: "Tony",       status: "on-track", notes: "Build complete ahead of schedule (May 11). Executable on shared Dropbox. Tony to begin UI implementation against simulator data." },
       { task: "Assembly documentation v1 — draft",              due: "Early July window",            involves: "—",          status: "pending", notes: "Based on Trip 1 footage and observation notes" },
       { task: "Hardware encasing — finalised",                  due: "~July 7 (deadline)",           involves: "Alex, Chris", status: "pending", notes: "60-day target from ~May 7" }
     ]
