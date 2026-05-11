@@ -265,12 +265,14 @@
     letter-spacing: 0.4px;
   }
   .badge-status::before { content: '●'; font-size: 8px; }
-  .s-active    { background: #dbeafe; color: #1d4ed8; }
-  .s-on-track  { background: #dcfce7; color: #15803d; }
-  .s-pending   { background: #fef3c7; color: #b45309; }
-  .s-blocked   { background: #fee2e2; color: #b91c1c; }
-  .s-complete  { background: #f1f5f9; color: #475569; }
-  .s-concurrent{ background: #f3e8ff; color: #7c3aed; }
+  .s-active      { background: #dbeafe; color: #1d4ed8; }
+  .s-on-track    { background: #dcfce7; color: #15803d; }
+  .s-pending     { background: #fef3c7; color: #b45309; }
+  .s-blocked     { background: #fee2e2; color: #b91c1c; }
+  .s-complete    { background: #f1f5f9; color: #475569; }
+  .s-concurrent  { background: #f3e8ff; color: #7c3aed; }
+  .s-submitted   { background: #fef9c3; color: #854d0e; }
+  .s-in-progress { background: #e0f2fe; color: #0369a1; }
 
   /* ── PROGRESS TRACK ─────────────────────────────────── */
   .progress-section {
@@ -328,10 +330,12 @@
     transition: box-shadow 0.2s;
   }
   .phase-card:hover { box-shadow: 0 4px 16px rgba(0,0,0,0.1); }
-  .phase-card.is-active { border-left-color: #2563eb; }
-  .phase-card.is-blocked { border-left-color: #dc2626; }
-  .phase-card.is-complete { border-left-color: #6b7280; opacity: 0.85; }
-  .phase-card.is-concurrent { border-left-color: #7c3aed; }
+  .phase-card.is-active      { border-left-color: #2563eb; }
+  .phase-card.is-blocked     { border-left-color: #dc2626; }
+  .phase-card.is-complete    { border-left-color: #6b7280; opacity: 0.85; }
+  .phase-card.is-concurrent  { border-left-color: #7c3aed; }
+  .phase-card.is-submitted   { border-left-color: #d97706; }
+  .phase-card.is-in-progress { border-left-color: #0284c7; }
 
   .phase-header {
     padding: 18px 22px;
@@ -573,20 +577,20 @@
 
 const CONFIG = {
   password:    "13693",       // Shared with Chris & Alex — change any time
-  lastUpdated: "May 10, 2026",
+  lastUpdated: "May 10, 2026 · 19:57 CDT",
   updatedBy:   "Stuart Huntley"
 };
 
 const SUMMARY = {
   overallStatus: "on-track",       // on-track | at-risk | blocked
   currentPhase:  "Pre-Boston Priorities",
-  headline: "Pre-Boston hold. Parts expected ~May 20. Gas Simulator release imminent. Hardware encasing coordination underway.",
+  headline: "Pre-Boston hold. Parts expected ~May 20. Testing &amp; Certification Roadmap delivered. Field kit recommendation complete. Assembly workshop plan in progress — Dallas HQ confirmed as production facility.",
   nextTarget:     "Boston Trip 1",
   nextTargetDate: "Week of May 20 (earliest — parts-dependent)",
   upcoming: [
     { date: "This week", label: "Gas Simulator release",  tip: "Gas Simulator stable build — final tweaks in progress. Delivery to Chris and Alex for demos and client discussions. Also needed before Boston trip." },
-    { date: "~May 20",   label: "Boston Trip 1",          tip: "Earliest possible trip date, dependent on parts arriving at Meza in Boston. Alex and Stuart are finalising the field kit and documentation plan. Brian to confirm once parts are in hand." },
-    { date: "~July 7",   label: "Encasing deadline",      tip: "60-day hardware encasing target from ~May 7. Vendor coordination in progress. Jim may have a manufacturer lead — status to be confirmed." }
+    { date: "~May 20",   label: "Boston Trip 1",          tip: "Earliest possible trip date, dependent on parts arriving at Meza in Boston. Field kit recommendation V7 complete ($785). Brian to confirm once parts are in hand." },
+    { date: "~July 7",   label: "Encasing deadline",      tip: "60-day hardware encasing target from ~May 7. Vendor coordination active. On track for July 7 deadline." }
   ]
 };
 
@@ -602,12 +606,12 @@ const PHASES = [
     summary: "Key deliverables and logistics to complete before the Boston trip.",
     description: "All work that can move forward before the Boston trip. Hardware-independent tracks running in parallel: Gas Simulator release, Testing & Certification Roadmap, assembly workshop planning, and hardware encasing coordination.",
     tasks: [
-      { task: "Gas Simulator — stable build release",           due: "This week",          involves: "Chris, Alex",       status: "on-track", notes: "Minor tweaks remaining" },
-      { task: "Testing & Certification Roadmap",                due: "This week",          involves: "Chris",             status: "on-track", notes: "Agreed deliverable; no external blockers; in progress" },
-      { task: "Boston Trip 1 — confirm date",                   due: "By May 13",          involves: "Brian",             status: "pending",  notes: "Parts expected ~May 20; awaiting confirmation" },
-      { task: "Boston Trip 1 — field kit & documentation plan", due: "Before trip",        involves: "Alex, Chris",       status: "pending",  notes: "Finalise once trip date confirmed" },
-      { task: "Assembly workshop — initial equipment list",     due: "Before trip",        involves: "Chris",             status: "on-track", notes: "First-pass list in progress; refine after Trip 1" },
-      { task: "Hardware encasing — vendor coordination",        due: "~July 7 (deadline)", involves: "Alex, Chris, Jim",  status: "on-track", notes: "60-day target from ~May 7; following up on manufacturer lead" }
+      { task: "Gas Simulator — stable build release",           due: "This week",          involves: "Chris, Alex",       status: "in-progress", notes: "Final tweaks underway; release imminent." },
+      { task: "Testing & Certification Roadmap",                due: "This week",          involves: "Chris",             status: "submitted",   notes: "Delivered May 10, 2026. Filed in shared folder — 01_Certification and Labeling." },
+      { task: "Boston Trip 1 — confirm date",                   due: "By May 13",          involves: "Brian",             status: "pending",     notes: "Parts expected ~May 20; awaiting confirmation from Brian." },
+      { task: "Boston Trip 1 — field kit & documentation plan", due: "Before trip",        involves: "Alex, Chris",       status: "submitted",   notes: "Field kit recommendation V7 complete ($785, 46% reduction). Shared in 02_Pre-Boston Priorities. Procurement ready once trip date confirmed." },
+      { task: "Assembly workshop — initial equipment plan",     due: "Before trip",        involves: "Chris",             status: "submitted",   notes: "Full equipment plan, room spec, and workbench spec delivered May 10. Filed in shared folder — 04_Facility and Assembly. Final procurement list to follow after Trip 1." },
+      { task: "Hardware encasing — vendor coordination",        due: "~July 7 (deadline)", involves: "Alex, Chris, Jim",  status: "on-track", notes: "60-day target from ~May 7; coordination ongoing." }
     ]
   },
   {
@@ -696,12 +700,10 @@ const PHASES = [
 ];
 
 const OPEN_QUESTIONS = [
-  { q: "Boston Trip 1 — exact date",                              why: "Pivots on parts arrival confirmation — gates all Phase 1 work" },
-  { q: "Assembly workshop location — HQ building vs. Michigan",   why: "Earlier planning assumed Michigan (R&D tax credit); recent references point to HQ building" },
-  { q: "Technician hiring timeline",                              why: "Gates Boston Trip 2 and co-build readiness" },
-  { q: "Hardware encasing — manufacturer lead status",            why: "Affects 60-day encasing track" },
-  { q: "IP agreement — signed and in hand?",                      why: "Standing item; Chris's May 1 letter describes it as settled — worth confirming" },
-  { q: "Explicit co-build target completion month",               why: "Would sharpen the schedule gap analysis considerably" }
+  { q: "Boston Trip 1 — exact date",              why: "Pivots on parts arrival confirmation from Brian — gates all Phase 1 work" },
+  { q: "Technician hiring timeline",              why: "Gates Boston Trip 2 and co-build readiness; affects M6 start window" },
+  { q: "Hardware encasing — vendor and approach confirmed?", why: "60-day target requires vendor selection and active coordination" },
+  { q: "Explicit co-build target completion month", why: "Would sharpen schedule planning considerably; optimistic Sep–Oct, realistic Nov–Dec" }
 ];
 
 // ╔══════════════════════════════════════════════════════════╗
@@ -725,12 +727,14 @@ function checkPassword() {
 
 function statusLabel(s) {
   const map = {
-    'active':     'Current',
-    'on-track':   'On Track',
-    'pending':    'Pending',
-    'blocked':    'Blocked',
-    'complete':   'Complete',
-    'concurrent': 'Concurrent'
+    'active':      'Current',
+    'on-track':    'On Track',
+    'pending':     'Pending',
+    'blocked':     'Blocked',
+    'complete':    'Complete',
+    'concurrent':  'Concurrent',
+    'submitted':   'Submitted — Pending Review',
+    'in-progress': 'In Progress'
   };
   return map[s] || s;
 }
@@ -738,7 +742,8 @@ function statusLabel(s) {
 function badgeClass(s) {
   const map = {
     'active': 's-active', 'on-track': 's-on-track', 'pending': 's-pending',
-    'blocked': 's-blocked', 'complete': 's-complete', 'concurrent': 's-concurrent'
+    'blocked': 's-blocked', 'complete': 's-complete', 'concurrent': 's-concurrent',
+    'submitted': 's-submitted', 'in-progress': 's-in-progress'
   };
   return 'badge-status ' + (map[s] || 's-pending');
 }
@@ -746,7 +751,8 @@ function badgeClass(s) {
 function cardClass(s) {
   const map = {
     'active': 'is-active', 'blocked': 'is-blocked',
-    'complete': 'is-complete', 'concurrent': 'is-concurrent'
+    'complete': 'is-complete', 'concurrent': 'is-concurrent',
+    'submitted': 'is-submitted', 'in-progress': 'is-in-progress'
   };
   return map[s] || '';
 }
